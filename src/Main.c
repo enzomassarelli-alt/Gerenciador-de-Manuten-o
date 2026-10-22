@@ -57,11 +57,35 @@ void interface_cadastrar(Lista *lista)
     } while (codSol < 1000 || codSol > 9999 || buscaPorCodigo(lista, codSol) != NULL);
 
     //Leitura e validação do CODIGO DO EQUIPAMENT0 (3 numeros e 3 letras)
+    do
     {
         codigoEqValido = 0;
         printf("\n\t[?] Codigo do Equipamento (Ex: OSC023) : ");
         fflush(stdin);
-        gets(codEq);
+
+        if (fgets(codEq, sizeof(codEq), stdin) != NULL)
+        {
+            int i = 0;
+            int encontrou_quebra = 0;
+
+            // Percorre a string para remover o '\n' gerado pelo fgets
+            while (codEq[i] != '\0')
+            {
+                if (codEq[i] == '\n')
+                {
+                    codEq[i] = '\0';
+                    encontrou_quebra = 1;
+                    break;
+                }
+                i++;
+            }
+
+            // Se não encontrou '\n', significa que o utilizador digitou mais do que o buffer suportava
+            if (!encontrou_quebra)
+            {
+                esvaziar_buffer();
+            }
+        }
 
         if (!codigoEquipamentoValido(codEq))
         {
@@ -91,9 +115,32 @@ void interface_cadastrar(Lista *lista)
         nomeEqValido = 0;
         printf("\n\t[?] Nome do Equipamento (max. 20 car.) : ");
         fflush(stdin);
-        gets(nomeEq);
 
-        if (strlen(nomeEq) == 0)
+        if (fgets(nomeEq, sizeof(nomeEq), stdin) != NULL)
+        {
+            int i = 0;
+            int encontrou_quebra = 0;
+
+            // Percorre o array manualmente para procurar o '\n'
+            while (nomeEq[i] != '\0')
+            {
+                if (nomeEq[i] == '\n')
+                {
+                    nomeEq[i] = '\0'; // Substitui o enter por fim de string
+                    encontrou_quebra = 1;
+                    break;
+                }
+                i++;
+            }
+
+            // Se não encontrou '\n', sobrou texto no teclado que estourou o limite
+            if (!encontrou_quebra)
+            {
+                esvaziar_buffer();
+            }
+        }
+
+        if (strlen(nomeEq) == 0) // (Aqui usa-se o strlen apenas para verificar se ficou vazio)
         {
             printf("\t    -> [ERRO] O nome nao pode ficar vazio!\n");
         }
@@ -407,7 +454,7 @@ int main(void)
         printf("\t| 5 - Exibir Ordem de Realizacao da Manutencao          |\n");
         printf("\t| 6 - Exibir Todas as Solicitacoes                      |\n");
         printf("\t| 0 - Finalizar Sistema                                 |\n");
-        printf("\n\t=========================================================\n");
+        printf("\t=========================================================\n");
         printf("\n\t\tSelecione uma OPCAO: ");
 
         if (scanf("%d", &opcao) != 1)
