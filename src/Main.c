@@ -29,7 +29,7 @@ void interface_cadastrar(Lista *lista)
     printf("\n\t                  CADASTRO DE SOLICITACAO                ");
     printf("\n\t---------------------------------------------------------\n");
 
-    // 1. Leitura e validação do Código da Solicitação (4 dígitos, sem duplicidade)
+    //Leitura e validação do CODIGO DA SOLICITACAO (4 dígitos, sem duplicidade)
     do
     {
         printf("\n\t[?] Codigo da Solicitacao (1000 - 9999): ");
@@ -53,8 +53,7 @@ void interface_cadastrar(Lista *lista)
         }
     } while (codSol < 1000 || codSol > 9999 || buscaPorCodigo(lista, codSol) != NULL);
 
-    // 2. Leitura e validação do Código do Equipamento (sem duplicidade)
-    do
+    //Leitura e validação do CODIGO DO EQUIPAMENT0 (3 numeros e 3 letras)
     {
         codigoEqValido = 0;
         printf("\n\t[?] Codigo do Equipamento (Ex: OSC023) : ");
@@ -83,7 +82,7 @@ void interface_cadastrar(Lista *lista)
         }
     } while (!codigoEqValido);
 
-    // 3. Leitura e validação do Nome do Equipamento (sem duplicidade)
+    //Leitura e validação do NOME do Equipamento
     do
     {
         nomeEqValido = 0;
@@ -109,7 +108,7 @@ void interface_cadastrar(Lista *lista)
         }
     } while (!nomeEqValido);
 
-    // 4. Leitura e validação da Prioridade
+    //Leitura e validação da PRIORIDADE
     do
     {
         printf("\n\t[?] Prioridade (1-Alta|2-Media|3-Baixa) : ");
@@ -143,7 +142,7 @@ void interface_cadastrar(Lista *lista)
         limite = 20;
     }
 
-    // 5. Leitura e validação do Período
+    //Leitura e validação do PERIODO
     do
     {
         printf("\n\t[?] Periodo de espera (1 a %2d dias)     : ", limite);
