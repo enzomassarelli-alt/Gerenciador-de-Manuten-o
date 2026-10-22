@@ -46,9 +46,12 @@ void interface_cadastrar(Lista *lista)
             {
                 printf("\t    -> [ERRO] O codigo precisa estar entre 1000 e 9999!\n");
             }
-            else if (buscaPorCodigo(lista, codSol) != NULL)
+            else
             {
+                if (buscaPorCodigo(lista, codSol) != NULL)
+                {
                 printf("\t    -> [ERRO] Este codigo de solicitacao ja esta cadastrado!\n");
+                }
             }
         }
     } while (codSol < 1000 || codSol > 9999 || buscaPorCodigo(lista, codSol) != NULL);
@@ -94,17 +97,23 @@ void interface_cadastrar(Lista *lista)
         {
             printf("\t    -> [ERRO] O nome nao pode ficar vazio!\n");
         }
-        else if (strlen(nomeEq) > 20)
-        {
-            printf("\t    -> [ERRO] O nome ultrapassou o limite de 20 caracteres!\n");
-        }
-        else if (buscaPorNomeEquipamento(lista, nomeEq) != NULL)
-        {
-            printf("\t    -> [ERRO] Ja existe uma solicitacao ativa para '%s'!\n", nomeEq);
-        }
         else
         {
-            nomeEqValido = 1;
+            if (strlen(nomeEq) > 20)
+            {
+                printf("\t    -> [ERRO] O nome ultrapassou o limite de 20 caracteres!\n");
+            }
+            else
+            {
+                if (buscaPorNomeEquipamento(lista, nomeEq) != NULL)
+                {
+                    printf("\t    -> [ERRO] Ja existe uma solicitacao ativa para '%s'!\n", nomeEq);
+                }
+                else
+                {
+                    nomeEqValido = 1;
+                }
+            }
         }
     } while (!nomeEqValido);
 
@@ -133,15 +142,17 @@ void interface_cadastrar(Lista *lista)
     {
         limite = 7;
     }
-    else if (prioridade == 2)
-    {
-        limite = 15;
-    }
     else
     {
-        limite = 20;
+        if (prioridade == 2)
+        {
+            limite = 15;
+        }
+            else
+            {
+                limite = 20;
+            }
     }
-
     //Leitura e validação do PERIODO
     do
     {
@@ -202,13 +213,16 @@ void interface_remover(Lista *lista)
             {
                 printf("\n\t    -> [ERRO] O codigo deve conter exatamente 4 digitos!\n");
             }
-            else if (retiraPorCodigo(lista, codSol))
-            {
-                printf("\n\t[SUCESSO] Solicitacao %04d removida com sucesso!\n", codSol);
-            }
             else
             {
-                printf("\n\t[ERRO] Solicitacao %04d nao foi encontrada na base de dados.\n", codSol);
+                if (retiraPorCodigo(lista, codSol))
+                {
+                    printf("\n\t[SUCESSO] Solicitacao %04d removida com sucesso!\n", codSol);
+                }
+                else
+                {
+                    printf("\n\t[ERRO] Solicitacao %04d nao foi encontrada na base de dados.\n", codSol);
+                }
             }
         }
     }
@@ -327,15 +341,17 @@ void interface_alterar(Lista *lista)
                     {
                         limite = 7;
                     }
-                    else if (novaPrioridade == 2)
-                    {
-                        limite = 15;
-                    }
                     else
                     {
-                        limite = 20;
+                        if (novaPrioridade == 2)
+                        {
+                            limite = 15;
+                        }
+                        else
+                        {
+                            limite = 20;
+                        }
                     }
-
                     do
                     {
                         printf("\n\t[?] Novo Periodo (1 a %d dias)                  : ", limite);
