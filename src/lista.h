@@ -18,7 +18,7 @@ int codigoEquipamentoValido(char *codEq) VALIDA SE O CÓDIGO DO EQUIPAMENTO SEGU
 
 int periodoValido(int prioridade, int periodo) VERIFICA SE O PERÍODO RESPEITA O LIMITE DE DIAS DE CADA PRIORIDADE
 
-int nomesIguais(char *n1, char *n2) COMPARA DOIS NOMES IGNORANDO MAIÚSCULAS E MINÚSCULAS
+int codigoIgual(char *c1, char *c2) COMPARA DOIS CÓDIGOS DE EQUIPAMENTO IGNORANDO MAIÚSCULAS E MINÚSCULAS
 
 No* criaNo(int codSol, char *codEq, char *nomeEq, int prioridade, int periodo) CRIA DINAMICAMENTE UM NÓ ISOLADO NA MEMÓRIA
 
@@ -26,9 +26,7 @@ No* buscaPorCodigo(Lista *l, int codSol) BUSCA E RETORNA UM NÓ PELO CÓDIGO DE 
 
 No* buscaPorCodigoEquipamento(Lista *l, char *codEq) BUSCA E RETORNA UM NÓ PELO CÓDIGO DO EQUIPAMENTO (EX: ABC123)
 
-No* buscaPorNomeEquipamento(Lista *l, char *nomeEq) BUSCA E RETORNA UM NÓ PELO NOME DO EQUIPAMENTO
-
-int insereFim(Lista *l, int codSol, char *codEq, char *nomeEq, int prioridade, int periodo) INSERE UM NOVO NÓ NO FINAL DA LISTA (ORDEM DE INSERÇÃO) E IMPEDE DUPLICIDADES
+int insereOrdenado(Lista *l, int codSol, char *codEq, char *nomeEq, int prioridade, int periodo) INSERE UM NOVO NÓ ORDENADO PELO CÓDIGO DA SOLICITAÇÃO E IMPEDE DUPLICIDADES
 
 int alteraPrioridadePeriodo(Lista *l, int codSol, int novaPrioridade, int novoPeriodo) ATUALIZA A PRIORIDADE E O PERÍODO DE ESPERA DE UMA SOLICITAÇÃO EXISTENTE
 
@@ -137,26 +135,26 @@ int periodoValido(int prioridade, int periodo)
     return 0;
 }
 
-//Compara duas strings ignorando diferenças entre maiúsculas e minúsculas
-int nomesIguais(char *n1, char *n2)
+//Compara dois códigos de equipamento ignorando diferenças entre maiúsculas e minúsculas
+int codigoIgual(char *c1, char *c2)
 {
     int i = 0;
 
-    if (n1 == NULL || n2 == NULL)
+    if (c1 == NULL || c2 == NULL)
     {
         return 0;
     }
 
-    while (n1[i] != '\0' && n2[i] != '\0')
+    while (c1[i] != '\0' && c2[i] != '\0')
     {
-        if (tolower((unsigned char)n1[i]) != tolower((unsigned char)n2[i]))
+        if (tolower((unsigned char)c1[i]) != tolower((unsigned char)c2[i]))
         {
             return 0;
         }
         i++;
     }
 
-    return (n1[i] == '\0' && n2[i] == '\0');
+    return (c1[i] == '\0' && c2[i] == '\0');
 }
 
 /* ALOCAÇÃO DE NÓ E BUSCAS */
@@ -209,27 +207,7 @@ No* buscaPorCodigoEquipamento(Lista *l, char *codEq)
     No *aux = l->inicio;
     while (aux != NULL)
     {
-        if (nomesIguais(aux->codigoEquipamento, codEq))
-        {
-            return aux;
-        }
-        aux = aux->prox;
-    }
-    return NULL;
-}
-
-//Busca um nó pelo NOME DO EQUIPAMENTO (Ex: cadeira)
-No* buscaPorNomeEquipamento(Lista *l, char *nomeEq)
-{
-    if (l == NULL || nomeEq == NULL)
-    {
-        return NULL;
-    }
-
-    No *aux = l->inicio;
-    while (aux != NULL)
-    {
-        if (nomesIguais(aux->nomeEquipamento, nomeEq))
+        if (codigoIgual(aux->codigoEquipamento, codEq))
         {
             return aux;
         }
@@ -240,20 +218,19 @@ No* buscaPorNomeEquipamento(Lista *l, char *nomeEq)
 
 /* OPERAÇÕES PRINCIPAIS (INSERÇÃO, ALTERAÇÃO E REMOÇÃO) */
 
-//Insere sempre no final da lista, preservando a ordem cronológica de inserção e sem duplicidades
-int insereFim(Lista *l, int codSol, char *codEq, char *nomeEq, int prioridade, int periodo)
+//Insere mantendo a lista ordenada pelo código da solicitação e impedindo duplicidades completas
+int insereOrdenado(Lista *l, int codSol, char *codEq, char *nomeEq, int prioridade, int periodo)
 {
-    No *novo, *aux;
+    No *novo, *ant, *aux;
 
     if (l == NULL)
     {
         return 0;
     }
 
-    //Verifica duplicidade de CODIGO DE SOLICITACAO, CODIGO DO EQUIPAMENTO e NOME DO EQUIPAMENTO
+    //Verifica duplicidade de CODIGO DE SOLICITACAO e CODIGO DO EQUIPAMENTO
     if (buscaPorCodigo(l, codSol) != NULL ||
-        buscaPorCodigoEquipamento(l, codEq) != NULL ||
-        buscaPorNomeEquipamento(l, nomeEq) != NULL)
+        buscaPorCodigoEquipamento(l, codEq) != NULL)
     {
         return 0;
     }
@@ -271,11 +248,24 @@ int insereFim(Lista *l, int codSol, char *codEq, char *nomeEq, int prioridade, i
     else
     {
         aux = l->inicio;
-        while (aux->prox != NULL)
+        ant = NULL;
+
+        while (aux != NULL && aux->codigoSolicitacao < codSol)
         {
+            ant = aux;
             aux = aux->prox;
         }
-        aux->prox = novo;
+
+        if (ant == NULL)
+        {
+            novo->prox = l->inicio;
+            l->inicio = novo;
+        }
+        else
+        {
+            novo->prox = aux;
+            ant->prox = novo;
+        }
     }
 
     return 1;
