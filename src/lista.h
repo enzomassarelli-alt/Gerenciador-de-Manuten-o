@@ -6,57 +6,56 @@
 #include <string.h>
 #include <ctype.h>
 
-/* =========================================================================
- * FUNÇÕES DE MANIPULAÇÃO DE LISTA
- * =========================================================================
+/*
+
+FUNÃ‡Ã•ES DE MANIPULAÃ‡ÃƒO DE LISTA
 
 Lista* criaLista(void) CRIA E INICIALIZA A ESTRUTURA DA LISTA ENCADEADA
 
-int listaVazia(Lista *l) VERIFICA SE A LISTA ESTÁ VAZIA (RETORNA 1 SE VAZIA, 0 CASO CONTRÁRIO)
+int listaVazia(Lista *l) VERIFICA SE A LISTA ESTÃ VAZIA (RETORNA 1 SE VAZIA, 0 CASO CONTRÃRIO)
 
-int codigoEquipamentoValido(char *codEq) VALIDA SE O CÓDIGO DO EQUIPAMENTO SEGUE O PADRÃO (3 LETRAS E 3 DÍGITOS)
+int codigoEquipamentoValido(char *codEq) VALIDA SE O CÃ“DIGO DO EQUIPAMENTO SEGUE O PADRÃƒO (3 LETRAS E 3 DÃGITOS)
 
-int periodoValido(int prioridade, int periodo) VERIFICA SE O PERÍODO RESPEITA O LIMITE DE DIAS DE CADA PRIORIDADE
+int periodoValido(int prioridade, int periodo) VERIFICA SE O PERÃODO RESPEITA O LIMITE DE DIAS DE CADA PRIORIDADE
 
-int nomesIguais(char *n1, char *n2) COMPARA DOIS NOMES IGNORANDO MAIÚSCULAS E MINÚSCULAS
+int nomesIguais(char *n1, char *n2) COMPARA DOIS NOMES IGNORANDO MAIÃšSCULAS E MINÃšSCULAS
 
-No* criaNo(int codSol, char *codEq, char *nomeEq, int prioridade, int periodo) CRIA DINAMICAMENTE UM NÓ ISOLADO NA MEMÓRIA
+No* criaNo(int codSol, char *codEq, char *nomeEq, int prioridade, int periodo) CRIA DINAMICAMENTE UM NÃ“ ISOLADO NA MEMÃ“RIA
 
-No* buscaPorCodigo(Lista *l, int codSol) BUSCA E RETORNA UM NÓ PELO CÓDIGO DE SOLICITAÇÃO (4 DÍGITOS)
+No* buscaPorCodigo(Lista *l, int codSol) BUSCA E RETORNA UM NÃ“ PELO CÃ“DIGO DE SOLICITAÃ‡ÃƒO (4 DÃGITOS)
 
-No* buscaPorCodigoEquipamento(Lista *l, char *codEq) BUSCA E RETORNA UM NÓ PELO CÓDIGO DO EQUIPAMENTO (EX: ABC123)
+No* buscaPorCodigoEquipamento(Lista *l, char *codEq) BUSCA E RETORNA UM NÃ“ PELO CÃ“DIGO DO EQUIPAMENTO (EX: ABC123)
 
-No* buscaPorNomeEquipamento(Lista *l, char *nomeEq) BUSCA E RETORNA UM NÓ PELO NOME DO EQUIPAMENTO
+No* buscaPorNomeEquipamento(Lista *l, char *nomeEq) BUSCA E RETORNA UM NÃ“ PELO NOME DO EQUIPAMENTO
 
-int insereFim(Lista *l, int codSol, char *codEq, char *nomeEq, int prioridade, int periodo) INSERE UM NOVO NÓ NO FINAL DA LISTA (ORDEM DE INSERÇÃO) E IMPEDE DUPLICIDADES
+int insereFim(Lista *l, int codSol, char *codEq, char *nomeEq, int prioridade, int periodo) INSERE UM NOVO NÃ“ NO FINAL DA LISTA (ORDEM DE INSERÃ‡ÃƒO) E IMPEDE DUPLICIDADES
 
-int alteraPrioridadePeriodo(Lista *l, int codSol, int novaPrioridade, int novoPeriodo) ATUALIZA A PRIORIDADE E O PERÍODO DE ESPERA DE UMA SOLICITAÇÃO EXISTENTE
+int alteraPrioridadePeriodo(Lista *l, int codSol, int novaPrioridade, int novoPeriodo) ATUALIZA A PRIORIDADE E O PERÃODO DE ESPERA DE UMA SOLICITAÃ‡ÃƒO EXISTENTE
 
-int retiraPorCodigo(Lista *l, int codSol) REMOVE UM NÓ ESPECÍFICO PELO CÓDIGO DA SOLICITAÇÃO E LIBERA A MEMÓRIA
+int retiraPorCodigo(Lista *l, int codSol) REMOVE UM NÃ“ ESPECÃFICO PELO CÃ“DIGO DA SOLICITAÃ‡ÃƒO E LIBERA A MEMÃ“RIA
 
-void insereOrdemManutencao(Lista *ordem, No *origem) INSERE UM NÓ NUMA LISTA ORDENADA PELO GRAU DE URGÊNCIA (PRIORIDADE -> PERÍODO -> CÓDIGO)
+void insereOrdemManutencao(Lista *ordem, No *origem) INSERE UM NÃ“ NUMA LISTA ORDENADA PELO GRAU DE URGÃŠNCIA (PRIORIDADE -> PERÃODO -> CÃ“DIGO)
 
-Lista* geraOrdemManutencao(Lista *l) GERA E RETORNA UMA NOVA LISTA ORDENADA POR URGÊNCIA, SEM MODIFICAR A LISTA ORIGINAL
+Lista* geraOrdemManutencao(Lista *l) GERA E RETORNA UMA NOVA LISTA ORDENADA POR URGÃŠNCIA, SEM MODIFICAR A LISTA ORIGINAL
 
-void imprimeNo(No *no) EXIBE OS DADOS FORMATADOS DE APENAS UM NÓ ESPECÍFICO
+void imprimeNo(No *no) EXIBE OS DADOS FORMATADOS DE APENAS UM NÃ“ ESPECÃFICO
 
 void imprimeLista(Lista *l) PERCORRE E IMPRIME TODOS OS REGISTOS CADASTRADOS NA LISTA
 
-Lista* liberaLista(Lista *l) LIBERA TODA A MEMÓRIA ALOCADA PELOS NÓS E PELA ESTRUTURA DA LISTA
-
+Lista* liberaLista(Lista *l) LIBERA TODA A MEMÃ“RIA ALOCADA PELOS NÃ“S E PELA ESTRUTURA DA LISTA
 */
 
-/* =========================================================================
- * DEFINIÇÃO DAS ESTRUTURAS
- * ========================================================================= */
+
+
+/*DEFINIÃ‡ÃƒO DAS ESTRUTURAS*/
 
 typedef struct no
 {
     int        codigoSolicitacao;
-    char       codigoEquipamento[7];  // 3 letras + 3 dígitos + '\0'
-    char       nomeEquipamento[21];   // Até 20 caracteres úteis + '\0'
-    int        prioridade;            // 1 - Alta, 2 - Média, 3 - Baixa
-    int        periodo;               // Dias tolerados
+    char       codigoEquipamento[7];  //3 letras + 3 dÃ­gitos + '\0'
+    char       nomeEquipamento[21];   //AtÃ© 20 caracteres Ãºteis + '\0'
+    int        prioridade;            //1 - Alta, 2 - MÃ©dia, 3 - Baixa
+    int        periodo;               //Dias tolerados
     struct no *prox;
 } No;
 
@@ -65,11 +64,10 @@ typedef struct lista
     No *inicio;
 } Lista;
 
-/* =========================================================================
- * 1. INICIALIZAÇÃO E VERIFICAÇÃO DE ESTADO
- * ========================================================================= */
 
-// Cria e inicializa a lista encadeada
+/* INICIALIZAÃ‡ÃƒO E VERIFICAÃ‡ÃƒO DE ESTADO */
+
+//Cria e inicializa a LISTA ENCADEADA
 Lista* criaLista(void)
 {
     Lista *l = (Lista*) malloc(sizeof(Lista));
@@ -80,7 +78,7 @@ Lista* criaLista(void)
     return l;
 }
 
-// Retorna 1 se a lista for nula ou não tiver nós, 0 caso contrário
+//Retorna 1 se a lista for nula ou nÃ£o tiver nÃ³s, 0 caso contrÃ¡rio
 int listaVazia(Lista *l)
 {
     if (l == NULL || l->inicio == NULL)
@@ -90,11 +88,9 @@ int listaVazia(Lista *l)
     return 0;
 }
 
-/* =========================================================================
- * 2. FUNÇÕES DE VALIDAÇÃO DE REGRAS DE NEGÓCIO
- * ========================================================================= */
+/* FUNÃ‡Ã•ES DE VALIDAÃ‡ÃƒO DE REGRAS DE NEGÃ“CIO */
 
-// Valida se o código do equipamento tem 3 letras seguidas de 3 dígitos
+//Valida se o CODIGO DO EQUIPAMENTO tem 3 letras seguidas de 3 dÃ­gitos
 int codigoEquipamentoValido(char *codEq)
 {
     int i;
@@ -123,7 +119,7 @@ int codigoEquipamentoValido(char *codEq)
     return 1;
 }
 
-// Verifica se o período respeita o limite de cada prioridade
+//Verifica se o perÃ­odo respeita o limite de cada prioridade
 int periodoValido(int prioridade, int periodo)
 {
     if (prioridade == 1)
@@ -141,7 +137,7 @@ int periodoValido(int prioridade, int periodo)
     return 0;
 }
 
-// Compara duas strings ignorando diferenças entre maiúsculas e minúsculas
+//Compara duas strings ignorando diferenÃ§as entre maiÃºsculas e minÃºsculas
 int nomesIguais(char *n1, char *n2)
 {
     int i = 0;
@@ -163,11 +159,9 @@ int nomesIguais(char *n1, char *n2)
     return (n1[i] == '\0' && n2[i] == '\0');
 }
 
-/* =========================================================================
- * 3. ALOCAÇÃO DE NÓ E BUSCAS
- * ========================================================================= */
+/* ALOCAÃ‡ÃƒO DE NÃ“ E BUSCAS */
 
-// Cria dinamicamente um nó isolado
+//Cria dinamicamente um nÃ³ isolado
 No* criaNo(int codSol, char *codEq, char *nomeEq, int prioridade, int periodo)
 {
     No *p = (No*) malloc(sizeof(No));
@@ -188,7 +182,7 @@ No* criaNo(int codSol, char *codEq, char *nomeEq, int prioridade, int periodo)
     return p;
 }
 
-// Busca um nó por código de solicitação (4 dígitos)
+//Busca um nÃ³ por CODIGO DE SOLICITACAO (4 dÃ­gitos)
 No* buscaPorCodigo(Lista *l, int codSol)
 {
     if (l == NULL)
@@ -204,7 +198,7 @@ No* buscaPorCodigo(Lista *l, int codSol)
     return aux;
 }
 
-// Busca um nó pelo código do equipamento (Ex: ABC123)
+//Busca um nÃ³ pelo CODIGO DE EQUIPAMENTO (Ex: ABC123)
 No* buscaPorCodigoEquipamento(Lista *l, char *codEq)
 {
     if (l == NULL || codEq == NULL)
@@ -224,7 +218,7 @@ No* buscaPorCodigoEquipamento(Lista *l, char *codEq)
     return NULL;
 }
 
-// Busca um nó pelo nome do equipamento (Ex: cadeira)
+//Busca um nÃ³ pelo NOME DO EQUIPAMENTO (Ex: cadeira)
 No* buscaPorNomeEquipamento(Lista *l, char *nomeEq)
 {
     if (l == NULL || nomeEq == NULL)
@@ -244,11 +238,9 @@ No* buscaPorNomeEquipamento(Lista *l, char *nomeEq)
     return NULL;
 }
 
-/* =========================================================================
- * 4. OPERAÇÕES PRINCIPAIS (INSERÇÃO, ALTERAÇÃO E REMOÇÃO)
- * ========================================================================= */
+/* OPERAÃ‡Ã•ES PRINCIPAIS (INSERÃ‡ÃƒO, ALTERAÃ‡ÃƒO E REMOÃ‡ÃƒO) */
 
-// Insere sempre no final da lista, preservando a ordem cronológica de inserção e sem duplicidades
+//Insere sempre no final da lista, preservando a ordem cronolÃ³gica de inserÃ§Ã£o e sem duplicidades
 int insereFim(Lista *l, int codSol, char *codEq, char *nomeEq, int prioridade, int periodo)
 {
     No *novo, *aux;
@@ -258,7 +250,7 @@ int insereFim(Lista *l, int codSol, char *codEq, char *nomeEq, int prioridade, i
         return 0;
     }
 
-    // Verifica duplicidade de Código de Solicitação, Código do Equipamento e Nome
+    //Verifica duplicidade de CODIGO DE SOLICITACAO, CODIGO DO EQUIPAMENTO e NOME DO EQUIPAMENTO
     if (buscaPorCodigo(l, codSol) != NULL ||
         buscaPorCodigoEquipamento(l, codEq) != NULL ||
         buscaPorNomeEquipamento(l, nomeEq) != NULL)
@@ -289,7 +281,7 @@ int insereFim(Lista *l, int codSol, char *codEq, char *nomeEq, int prioridade, i
     return 1;
 }
 
-// Atualiza prioridade e período de um nó existente
+// Atualiza prioridade e perÃ­odo de um nÃ³ existente
 int alteraPrioridadePeriodo(Lista *l, int codSol, int novaPrioridade, int novoPeriodo)
 {
     No *no = buscaPorCodigo(l, codSol);
@@ -310,7 +302,7 @@ int alteraPrioridadePeriodo(Lista *l, int codSol, int novaPrioridade, int novoPe
     return 1;
 }
 
-// Remove nó pelo código de solicitação e libera a memória
+//Remove nÃ³ pelo CODIGO DE SOLICITACAO e libera a memÃ³ria
 int retiraPorCodigo(Lista *l, int codSol)
 {
     No *ant, *aux;
@@ -320,7 +312,7 @@ int retiraPorCodigo(Lista *l, int codSol)
         return 0;
     }
 
-    // Remoção do primeiro elemento
+    //RemoÃ§Ã£o do primeiro elemento
     if (l->inicio->codigoSolicitacao == codSol)
     {
         aux = l->inicio;
@@ -349,54 +341,48 @@ int retiraPorCodigo(Lista *l, int codSol)
     return 1;
 }
 
-/* =========================================================================
- * 5. GERAÇÃO DA ORDEM DE MANUTENÇÃO (ORDENAÇÃO POR URGÊNCIA)
- * ========================================================================= */
+/* GERAÃ‡ÃƒO DA ORDEM DE MANUTENÃ‡ÃƒO (ORDENAÃ‡ÃƒO POR URGÃŠNCIA) */
 
-// Inserção ordenada por urgência (Prioridade -> Período -> Código)
+//InserÃ§Ã£o ordenada por urgÃªncia (Prioridade -> PerÃ­odo -> CÃ³digo)
 void insereOrdemManutencao(Lista *ordem, No *origem)
 {
     No *novo, *ant, *aux;
 
     novo = criaNo(origem->codigoSolicitacao, origem->codigoEquipamento,
                   origem->nomeEquipamento, origem->prioridade, origem->periodo);
-    if (novo == NULL)
-    {
-        return;
-    }
 
-    if (ordem->inicio == NULL)
+    if (novo != NULL)
     {
-        ordem->inicio = novo;
-        return;
-    }
+        if (ordem->inicio == NULL)
+        {
+            ordem->inicio = novo;
+        }
+        else
+        {
+            aux = ordem->inicio;
+            ant = NULL;
 
-    aux = ordem->inicio;
-    ant = NULL;
+            while (aux != NULL &&(aux->prioridade < novo->prioridade ||(aux->prioridade == novo->prioridade && aux->periodo < novo->periodo) ||(aux->prioridade == novo->prioridade && aux->periodo == novo->periodo && aux->codigoSolicitacao < novo->codigoSolicitacao)))
+            {
+                ant = aux;
+                aux = aux->prox;
+            }
 
-    while (aux != NULL &&
-           (aux->prioridade < novo->prioridade ||
-            (aux->prioridade == novo->prioridade && aux->periodo < novo->periodo) ||
-            (aux->prioridade == novo->prioridade && aux->periodo == novo->periodo &&
-             aux->codigoSolicitacao < novo->codigoSolicitacao)))
-    {
-        ant = aux;
-        aux = aux->prox;
-    }
-
-    if (ant == NULL)
-    {
-        novo->prox = ordem->inicio;
-        ordem->inicio = novo;
-    }
-    else
-    {
-        novo->prox = aux;
-        ant->prox = novo;
+            if (ant == NULL)
+            {
+                novo->prox = ordem->inicio;
+                ordem->inicio = novo;
+            }
+            else
+            {
+                novo->prox = aux;
+                ant->prox = novo;
+            }
+        }
     }
 }
 
-// Cria uma nova lista ordenada por urgência sem modificar a lista original
+//Cria uma nova lista ordenada por urgÃªncia sem modificar a lista original
 Lista* geraOrdemManutencao(Lista *l)
 {
     if (l == NULL)
@@ -420,57 +406,58 @@ Lista* geraOrdemManutencao(Lista *l)
     return ordem;
 }
 
-/* =========================================================================
- * 6. EXIBIÇÃO DE RELATÓRIOS E LIBERAÇÃO DE MEMÓRIA
- * ========================================================================= */
+/* EXIBIÃ‡ÃƒO DE RELATÃ“RIOS E LIBERAÃ‡ÃƒO DE MEMÃ“RIA */
 
-// Exibe os dados formatados de um único nó
+//Exibe os dados formatados de um Ãºnico nÃ³
 void imprimeNo(No *no)
 {
-    if (no == NULL)
-    {
-        return;
-    }
-
     char *txtPrioridade;
-    if (no->prioridade == 1)
-    {
-        txtPrioridade = "Alta";
-    }
-    else if (no->prioridade == 2)
-    {
-        txtPrioridade = "Media";
-    }
-    else
-    {
-        txtPrioridade = "Baixa";
-    }
 
-    printf("\t| Solicitacao: %04d | Codigo: %-6s | Equip: %-20s | Prioridade: %d-%-5s | Periodo: %2d dia(s) |\n",
-           no->codigoSolicitacao, no->codigoEquipamento, no->nomeEquipamento,
-           no->prioridade, txtPrioridade, no->periodo);
+    if (no != NULL)
+    {
+        if (no->prioridade == 1)
+        {
+            txtPrioridade = "Alta";
+        }
+        else
+        {
+            if (no->prioridade == 2)
+            {
+                txtPrioridade = "Media";
+            }
+            else
+            {
+                txtPrioridade = "Baixa";
+            }
+        }
+
+        printf("\t| Solicitacao: %04d | Codigo: %-6s | Equip: %-20s | Prioridade: %d-%-5s | Periodo: %2d dia(s) |\n", no->codigoSolicitacao, no->codigoEquipamento, no->nomeEquipamento, no->prioridade, txtPrioridade, no->periodo);
+    }
 }
 
-// Percorre e imprime toda a lista
+//Percorre e imprime toda a lista
 void imprimeLista(Lista *l)
 {
+    No *aux;
+
     if (listaVazia(l))
     {
         printf("\n\tNao ha solicitacoes cadastradas no momento.\n");
-        return;
     }
-
-    printf("\n\t========================================== RELATORIO DE SOLICITACOES ==========================================\n");
-    No *aux = l->inicio;
-    while (aux != NULL)
+    else
     {
-        imprimeNo(aux);
-        aux = aux->prox;
+        printf("\n\t========================================== RELATORIO DE SOLICITACOES ==========================================\n");
+        aux = l->inicio;
+        while (aux != NULL)
+        {
+            imprimeNo(aux);
+            aux = aux->prox;
+        }
+        printf("\t===============================================================================================================\n");
     }
-    printf("\t===============================================================================================================\n");
 }
 
-// Libera todos os nós e a estrutura da lista
+//Libera todos os nÃ³s e a estrutura da lista
 Lista* liberaLista(Lista *l)
 {
     if (l == NULL)
