@@ -57,33 +57,23 @@ void interface_cadastrar(Lista *lista)
     } while (codSol < 1000 || codSol > 9999 || buscaPorCodigo(lista, codSol) != NULL);
 
     //Leitura e validação do CODIGO DO EQUIPAMENT0 (3 numeros e 3 letras)
+   // 2. Leitura e validação do Código do Equipamento (sem duplicidade e com size_t)
     do
     {
         codigoEqValido = 0;
         printf("\n\t[?] Codigo do Equipamento (Ex: OSC023) : ");
-        fflush(stdin);
 
+        // Uso de fgets com proteção de tamanho baseada em size_t
         if (fgets(codEq, sizeof(codEq), stdin) != NULL)
         {
-            int i = 0;
-            int encontrou_quebra = 0;
-
-            // Percorre a string para remover o '\n' gerado pelo fgets
-            while (codEq[i] != '\0')
+            size_t len = strlen(codEq);
+            if (len > 0 && codEq[len - 1] == '\n')
             {
-                if (codEq[i] == '\n')
-                {
-                    codEq[i] = '\0';
-                    encontrou_quebra = 1;
-                    break;
-                }
-                i++;
+                codEq[len - 1] = '\0'; // Remove a quebra de linha do final
             }
-
-            // Se não encontrou '\n', significa que o utilizador digitou mais do que o buffer suportava
-            if (!encontrou_quebra)
+            else
             {
-                esvaziar_buffer();
+                esvaziar_buffer(); // Limpa o excesso do buffer caso ultrapasse o limite
             }
         }
 
@@ -108,39 +98,28 @@ void interface_cadastrar(Lista *lista)
             }
         }
     } while (!codigoEqValido);
-
     //Leitura e validação do NOME do Equipamento
+
     do
     {
         nomeEqValido = 0;
         printf("\n\t[?] Nome do Equipamento (max. 20 car.) : ");
-        fflush(stdin);
 
+        // Substituição do gets por fgets com proteção de tamanho
         if (fgets(nomeEq, sizeof(nomeEq), stdin) != NULL)
         {
-            int i = 0;
-            int encontrou_quebra = 0;
-
-            // Percorre o array manualmente para procurar o '\n'
-            while (nomeEq[i] != '\0')
+            size_t len = strlen(nomeEq);
+            if (len > 0 && nomeEq[len - 1] == '\n')
             {
-                if (nomeEq[i] == '\n')
-                {
-                    nomeEq[i] = '\0'; // Substitui o enter por fim de string
-                    encontrou_quebra = 1;
-                    break;
-                }
-                i++;
+                nomeEq[len - 1] = '\0'; // Remove a quebra de linha do final
             }
-
-            // Se não encontrou '\n', sobrou texto no teclado que estourou o limite
-            if (!encontrou_quebra)
+            else
             {
-                esvaziar_buffer();
+                esvaziar_buffer(); // Limpa o excesso do buffer caso ultrapasse 50 chars
             }
         }
 
-        if (strlen(nomeEq) == 0) // (Aqui usa-se o strlen apenas para verificar se ficou vazio)
+        if (strlen(nomeEq) == 0)
         {
             printf("\t    -> [ERRO] O nome nao pode ficar vazio!\n");
         }
