@@ -32,7 +32,7 @@ void interface_cadastrar(Lista *lista)
     //Leitura e validação do CODIGO DA SOLICITACAO (4 dígitos, sem duplicidade)
     do
     {
-        printf("\n\t[?] Codigo da Solicitacao (1000 - 9999): ");
+        printf("\n\t[?] Codigo da Solicicitacao (1000 - 9999): ");
         if (scanf("%d", &codSol) != 1)
         {
             printf("\t    -> [ERRO] Digite apenas numeros inteiros!\n");
@@ -57,13 +57,11 @@ void interface_cadastrar(Lista *lista)
     } while (codSol < 1000 || codSol > 9999 || buscaPorCodigo(lista, codSol) != NULL);
 
     //Leitura e validação do CODIGO DO EQUIPAMENT0 (3 numeros e 3 letras)
-   // 2. Leitura e validação do Código do Equipamento (sem duplicidade e com size_t)
     do
     {
         codigoEqValido = 0;
         printf("\n\t[?] Codigo do Equipamento (Ex: OSC023) : ");
 
-        // Uso de fgets com proteção de tamanho baseada em size_t
         if (fgets(codEq, sizeof(codEq), stdin) != NULL)
         {
             size_t len = strlen(codEq);
@@ -105,7 +103,6 @@ void interface_cadastrar(Lista *lista)
         nomeEqValido = 0;
         printf("\n\t[?] Nome do Equipamento (max. 20 car.) : ");
 
-        // Substituição do gets por fgets com proteção de tamanho
         if (fgets(nomeEq, sizeof(nomeEq), stdin) != NULL)
         {
             size_t len = strlen(nomeEq);
@@ -131,14 +128,7 @@ void interface_cadastrar(Lista *lista)
             }
             else
             {
-                if (buscaPorNomeEquipamento(lista, nomeEq) != NULL)
-                {
-                    printf("\t    -> [ERRO] Ja existe uma solicitacao ativa para '%s'!\n", nomeEq);
-                }
-                else
-                {
-                    nomeEqValido = 1;
-                }
+                nomeEqValido = 1;
             }
         }
     } while (!nomeEqValido);
@@ -200,7 +190,8 @@ void interface_cadastrar(Lista *lista)
     } while (!periodoValido(prioridade, periodo));
 
     printf("\n\t---------------------------------------------------------");
-    if (insereFim(lista, codSol, codEq, nomeEq, prioridade, periodo))
+
+    if (insereOrdenado(lista, codSol, codEq, nomeEq, prioridade, periodo))
     {
         printf("\n\t[SUCESSO] Solicitacao cadastrada com sucesso!\n");
     }
@@ -224,7 +215,7 @@ void interface_remover(Lista *lista)
     else
     {
         int codSol;
-        printf("\n\t[?] Informe o Codigo da Solicitacao (1000 - 9999): ");
+        printf("\n\t[?] Informe o Codigo da Solicicitacao (1000 - 9999): ");
 
         if (scanf("%d", &codSol) != 1)
         {
@@ -268,7 +259,7 @@ void interface_consultar(Lista *lista)
     else
     {
         int codSol;
-        printf("\n\t[?] Informe o Codigo da Solicitacao (1000 - 9999): ");
+        printf("\n\t[?] Informe o Codigo da Solicicitacao (1000 - 9999): ");
 
         if (scanf("%d", &codSol) != 1)
         {
@@ -314,7 +305,7 @@ void interface_alterar(Lista *lista)
     else
     {
         int codSol;
-        printf("\n\t[?] Informe o Codigo da Solicitacao (1000 - 9999): ");
+        printf("\n\t[?] Informe o Codigo da Solicicitacao (1000 - 9999): ");
 
         if (scanf("%d", &codSol) != 1)
         {
